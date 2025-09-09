@@ -1,57 +1,67 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
-function App() {
-  const [darkMode, setDarkMode] = useState(false);
+// Generic circular counter hook
+function useCounter(max, onOverflow) {
+  const [value, setValue] = useState(0);
+
+  const tick = () => {
+    setValue((prev) => {
+      if (prev + 1 >= max) {
+        onOverflow && onOverflow(); // notify next counter
+        return 0;
+      }
+      return prev + 1;
+    });
+  };
+
+  return [value, tick];
+}
+
+function Clock() {
+  const [hours, tickHours] = useCounter(24);
+  const [minutes, tickMinutes] = useCounter(60, tickHours);
+  const [seconds, tickSeconds] = useCounter(60, tickMinutes);
+
+  // start ticking seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      tickSeconds();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [tickSeconds]);
+
+  // calculate analog clock hand angles
+  const secondAngle = seconds * 6; // 360 / 60
+  const minuteAngle = minutes * 6 + seconds * 0.1; // smooth move
+  const hourAngle = (hours % 12) * 30 + minutes * 0.5; // 360 / 12 = 30
 
   return (
-    <div className={darkMode ? "App dark" : "App"}>
-      {/* Navbar */}
-      <nav className="navbar">
-        <h2 className="logo">MyWebsite</h2>
-        <ul>
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#footer">Contact</a></li>
-        </ul>
-        <button 
-          className="toggle-btn" 
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? "☀️ Light" : "🌙 Dark"}
-        </button>
-      </nav>
+    <div className="clock-container">
+      {/* Digital */}
+      <div className="digital">
+        {String(hours).padStart(2, "0")}:
+        {String(minutes).padStart(2, "0")}:
+        {String(seconds).padStart(2, "0")}
+      </div>
 
-      {/* Hero Section */}
-      <section id="hero" className="hero">
-        <h1>Welcome to MyWebsite</h1>
-        <p>A modern React website with nice styling.</p>
-        <a href="#features" className="btn">Explore Features</a>
-      </section>
+      {/* Analog */}
+      <div className="analog">
+        <div className="hand hour" style={{ transform: `rotate(${hourAngle}deg)` }}></div>
+        <div className="hand minute" style={{ transform: `rotate(${minuteAngle}deg)` }}></div>
+        <div className="hand second" style={{ transform: `rotate(${secondAngle}deg)` }}></div>
+        {/* clock center dot */}
+        <div className="center-dot"></div>
+      </div>
+    </div>
+  );
+}
 
-      {/* Features Section */}
-      <section id="features" className="features">
-        <h2>Features</h2>
-        <div className="feature-list">
-          <div className="feature-card">
-            <h3>🚀 Fast</h3>
-            <p>Optimized React components for speed and performance.</p>
-          </div>
-          <div className="feature-card">
-            <h3>🎨 Stylish</h3>
-            <p>Clean modern design with responsive layout.</p>
-          </div>
-          <div className="feature-card">
-            <h3>⚡ Easy</h3>
-            <p>Simple structure, easy to customize and expand.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer id="footer" className="footer">
-        <p>© {new Date().getFullYear()} MyWebsite. All rights reserved.</p>
-      </footer>
+function App() {
+  return (
+    <div className="App">
+      <h2>⏰ React Analog + Digital Clock</h2>
+      <Clock />
     </div>
   );
 }

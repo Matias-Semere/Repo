@@ -1,117 +1,71 @@
-/* General */
-body, html, .App {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: background 0.3s, color 0.3s;
-}
-
-/* Dark mode */
-.App.dark {
-  background: #121212;
-  color: #f5f5f5;
-}
-
-.App.dark .navbar {
-  background: #1f1f1f;
-}
-
-.App.dark .feature-card {
-  background: #222;
-}
-
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background: #0078ff;
-  color: white;
-}
-
-.navbar ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.toggle-btn {
-  background: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Hero Section */
-.hero {
+.App {
   text-align: center;
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #0078ff, #00c6ff);
-  color: white;
-}
-
-.hero h1 {
-  font-size: 3rem;
-}
-
-.hero p {
-  margin: 20px 0;
-}
-
-.btn {
-  display: inline-block;
-  padding: 12px 25px;
-  background: white;
-  color: #0078ff;
-  font-weight: bold;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: #f0f0f0;
-}
-
-/* Features */
-.features {
-  padding: 60px 20px;
-  text-align: center;
-}
-
-.feature-list {
+  font-family: monospace;
+  background: #1a1a1a;
+  color: #00ffcc;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 30px;
-  margin-top: 30px;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
-.feature-card {
-  background: #f8f8f8;
-  padding: 20px;
-  border-radius: 12px;
+.digital {
+  font-size: 3rem;
+  margin-bottom: 30px;
+}
+
+/* Analog clock container */
+.analog {
+  position: relative;
   width: 250px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  height: 250px;
+  border: 8px solid #00ffcc;
+  border-radius: 50%;
+  background: #111;
+  margin: auto;
 }
 
-.feature-card:hover {
-  transform: translateY(-5px);
+/* Clock hands */
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  background: #00ffcc;
+  border-radius: 4px;
 }
 
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 20px;
-  background: #0078ff;
-  color: white;
-  margin-top: 50px;
+.hand.hour {
+  width: 6px;
+  height: 70px;
+  background: #00bbaa;
+}
+
+.hand.minute {
+  width: 4px;
+  height: 90px;
+  background: #84fd03;
+}
+
+.hand.second {
+  width: 2px;
+  height: 100px;
+  background: red;
+}
+
+/* Center dot */
+.center-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #00ffcc;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+* {
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
